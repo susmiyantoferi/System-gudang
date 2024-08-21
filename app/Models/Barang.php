@@ -18,10 +18,11 @@ class Barang extends Model
     protected $fillable = [
         'name',
         'kode',
-        'ketegori',
+        'kategori',
         'lokasi',
         'harga',
         'jumlah',
+        'user_id'
     ];
 
     public function users(): BelongsTo{

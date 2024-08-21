@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name', 100)->nullable(false);
             $table->string('kode', 100)->nullable(false)->unique('kode_barang_unique');
             $table->string('kategori', 100)->nullable(false);
-            $table->string('lokasi', 100)->nullable(true);
+            $table->string('lokasi', 100)->nullable(false);
             $table->integer('harga')->nullable(false);
             $table->integer('jumlah')->nullable(false);
             $table->unsignedBigInteger('user_id')->nullable(false);
