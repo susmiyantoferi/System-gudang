@@ -34,6 +34,18 @@ Route::middleware(\App\Http\Middleware\ApiAuthMiddleware::class)->group(function
     Route::delete('/barangs/{id}', [\App\Http\Controllers\BarangController::class, 'delete'])->where('id', '[0-9]+');
 
 
-    Route::post('/barangs/{idBarang}/mutasis', [\App\Http\Controllers\MutasiController::class, 'create'])->where('idBarang', '[0-9]+');
+    Route::post('/barangs/{idBarang}/mutasis', [\App\Http\Controllers\MutasiController::class, 'create'])
+        ->where('idBarang', '[0-9]+');
+    Route::get('/barangs/{idBarang}/mutasis', [\App\Http\Controllers\MutasiController::class, 'list'])
+        ->where('idBarang', '[0-9]+');
+    Route::get('/barangs/{idBarang}/mutasis/{idMutasi}', [\App\Http\Controllers\MutasiController::class, 'get'])
+        ->where('idBarang', '[0-9]+')
+        ->where('idMutasi', '[0-9]+');
+    Route::put('/barangs/{idBarang}/mutasis/{idMutasi}', [\App\Http\Controllers\MutasiController::class, 'update'])
+        ->where('idBarang', '[0-9]+')
+        ->where('idMutasi', '[0-9]+');
+    Route::delete('/barangs/{idBarang}/mutasis/{idMutasi}', [\App\Http\Controllers\MutasiController::class, 'delete'])
+        ->where('idBarang', '[0-9]+')
+        ->where('idMutasi', '[0-9]+');
 });
 
