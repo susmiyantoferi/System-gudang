@@ -20,5 +20,12 @@ class UserSeeder extends Seeder
             'name' => 'testlogin',
             'token' => 'test',
         ]);
+
+        User::create([
+            'email' => 'test2@gmail.com',
+            'password' => Hash::make('test2'),
+            'name' => 'testlogin2',
+            'token' => 'test2',
+        ]);
     }
 }
