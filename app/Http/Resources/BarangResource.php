@@ -22,6 +22,7 @@ class BarangResource extends JsonResource
             'lokasi' => $this->lokasi,
             'harga' => $this->harga,
             'jumlah' => $this->jumlah,
+            'user_id' => $this->user_id,
         ];
     }
 }

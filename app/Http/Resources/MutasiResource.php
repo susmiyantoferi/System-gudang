@@ -19,7 +19,10 @@ class MutasiResource extends JsonResource
             'jenis_mutasi' => $this->jenis_mutasi,
             'jumlah' => $this->jumlah,
             'tanggal' => $this->tanggal,
-            'barang_id' => $this->barang_id
+            'barang_id' => $this->barang_id,
+            'barang' => new BarangResource($this->whenLoaded('barangs')),
+            'user_id' => $this->user_id,
+            'user' => new UserResource($this->whenLoaded('users')),
         ];
     }
 }

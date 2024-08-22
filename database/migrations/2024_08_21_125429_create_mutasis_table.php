@@ -17,8 +17,10 @@ return new class extends Migration
             $table->integer('jumlah')->nullable(false);
             $table->date('tanggal')->nullable(false);
             $table->unsignedBigInteger('barang_id')->nullable(false);
+            $table->unsignedBigInteger('user_id')->nullable(false);
             $table->timestamps();
             $table->foreign('barang_id')->on('barangs')->references('id');
+            $table->foreign('user_id')->on('users')->references('id');
 
         });
     }

@@ -47,5 +47,7 @@ Route::middleware(\App\Http\Middleware\ApiAuthMiddleware::class)->group(function
     Route::delete('/barangs/{idBarang}/mutasis/{idMutasi}', [\App\Http\Controllers\MutasiController::class, 'delete'])
         ->where('idBarang', '[0-9]+')
         ->where('idMutasi', '[0-9]+');
+
+    Route::get('/barangs/mutasis', [\App\Http\Controllers\MutasiController::class, 'allData']);
 });
 

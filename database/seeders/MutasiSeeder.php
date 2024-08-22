@@ -16,11 +16,13 @@ class MutasiSeeder extends Seeder
     public function run(): void
     {
         $barang = Barang::query()->limit(1)->first();
+        $user = User::query()->limit(1)->first();
         Mutasi::create([
             'jenis_mutasi' => 'test masuk',
             'jumlah' => 3,
             'tanggal' => '2024-08-22',
             'barang_id' => $barang->id,
+            'user_id' => $user->id,
         ]);
     }
 }

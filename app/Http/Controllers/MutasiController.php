@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MutasiCreateRequset;
 use App\Http\Requests\MutasiUpdateRequest;
+use App\Http\Resources\MutasiAllResource;
 use App\Http\Resources\MutasiResource;
 use App\Models\Barang;
 use App\Models\Mutasi;
@@ -57,20 +58,24 @@ class MutasiController extends Controller
         $data = $requset->validated();
         $mutasi = new Mutasi($data);
         $mutasi->barang_id = $barang->id;
-
+        $mutasi->user_id = $user->id;
+        //dd($mutasi);
         $mutasi->save();
 
         return (new MutasiResource($mutasi))->response()->setStatusCode(201);
     }
 
-    public function get(int $idBarang, int $idMutasi): MutasiResource
+    public function get(int $idBarang, int $idMutasi): JsonResponse
     {
         $user = Auth::user();
 
         $barang = $this->getBarang($user, $idBarang);
         $mutasi = $this->getMutasi($barang, $idMutasi);
 
-        return new MutasiResource($mutasi);
+        $result = Mutasi::with(['users', 'barangs'])->where('barang_id', $barang->id)
+            ->where('id',$mutasi->id)->get();
+        //dd($result);
+        return (MutasiResource::collection($result))->response()->setStatusCode(200);
     }
 
     public function update(int $idBarang, int $idMutasi, MutasiUpdateRequest $request): MutasiResource
@@ -105,7 +110,15 @@ class MutasiController extends Controller
         $user = Auth::user();
         $barang = $this->getBarang($user, $idBarang);
 
-        $mutasi = Mutasi::where('barang_id', $barang->id)->get();
+        $mutasi = Mutasi::with(['users', 'barangs'])->where('barang_id', $barang->id)->get();
+        //dd($mutasi);
+        return (MutasiResource::collection($mutasi))->response()->setStatusCode(200);
+    }
+
+    public function allData(): JsonResponse{
+
+        $mutasi = Mutasi::with(['users', 'barangs'])->get();
+        //dd($mutasi);
 
         return (MutasiResource::collection($mutasi))->response()->setStatusCode(200);
     }

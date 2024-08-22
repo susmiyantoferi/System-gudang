@@ -23,4 +23,8 @@ class Mutasi extends Model
     public function barangs(): BelongsTo{
         return $this->belongsTo(Barang::class, 'barang_id', 'id');
     }
+
+    public function users(): BelongsTo{
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

@@ -29,6 +29,10 @@ class User extends Model implements Authenticatable
         return $this->hasMany(Barang::class, 'user_id', 'id');
     }
 
+    public function mutasis(): HasMany{
+        return $this->hasMany(Mutasi::class, 'user_id', 'id');
+    }
+
     public function getAuthIdentifierName()
     {
         return 'email';

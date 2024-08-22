@@ -100,9 +100,9 @@ class MutasiTest extends TestCase
         ])->assertStatus(200)
             ->assertJson([
                 "data" => [
-                    'jenis_mutasi' => 'test masuk',
-                    'jumlah' => 3,
-                    'tanggal' => '2024-08-22',
+                    ['jenis_mutasi' => 'test masuk',
+                        'jumlah' => 3,
+                        'tanggal' => '2024-08-22',]
                 ]
             ]);
     }
@@ -241,7 +241,7 @@ class MutasiTest extends TestCase
     public function testListSuccess()
     {
         $this->seed([UserSeeder::class, BarangSeeder::class, MutasiSeeder::class]);
-       $barang = Barang::query()->limit(1)->first();
+        $barang = Barang::query()->limit(1)->first();
 
         $this->get('/api/barangs/' . $barang->id . '/mutasis',
             [
@@ -263,14 +263,50 @@ class MutasiTest extends TestCase
         $this->seed([UserSeeder::class, BarangSeeder::class, MutasiSeeder::class]);
         $barang = Barang::query()->limit(1)->first();
 
-        $this->get('/api/barangs/' . ($barang->id+1) . '/mutasis',
+        $this->get('/api/barangs/' . ($barang->id + 1) . '/mutasis',
             [
                 'Authorization' => 'test'
             ])->assertStatus(404)
             ->assertJson([
                 "errors" => [
-                    'message'=>[
+                    'message' => [
                         'not found'
+                    ]
+                ]
+            ]);
+    }
+
+    public function testAllDataSuccess()
+    {
+        $this->seed([UserSeeder::class, BarangSeeder::class, MutasiSeeder::class]);
+
+        $this->get('/api/barangs/mutasis',
+            [
+                'Authorization' => 'test'
+            ])->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    [
+                        'jenis_mutasi' => 'test masuk',
+                        'jumlah' => 3,
+                        'tanggal' => '2024-08-22',
+                    ]
+                ]
+            ]);
+    }
+
+    public function testAllDataTokenFailled()
+    {
+        $this->seed([UserSeeder::class, BarangSeeder::class, MutasiSeeder::class]);
+
+        $this->get('/api/barangs/mutasis',
+            [
+                'Authorization' => 'salah'
+            ])->assertStatus(401)
+            ->assertJson([
+                "errors" => [
+                    "message" => [
+                        'unauthorized'
                     ]
                 ]
             ]);
