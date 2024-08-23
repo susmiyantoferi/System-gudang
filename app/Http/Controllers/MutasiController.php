@@ -62,7 +62,11 @@ class MutasiController extends Controller
         //dd($mutasi);
         $mutasi->save();
 
-        return (new MutasiResource($mutasi))->response()->setStatusCode(201);
+        $result = Mutasi::with(['users', 'barangs'])->where('barang_id', $barang->id)
+            ->where('id',$mutasi->id)->get();
+        //dd($result);
+
+        return (MutasiResource::collection($result))->response()->setStatusCode(201);
     }
 
     public function get(int $idBarang, int $idMutasi): JsonResponse
@@ -78,7 +82,7 @@ class MutasiController extends Controller
         return (MutasiResource::collection($result))->response()->setStatusCode(200);
     }
 
-    public function update(int $idBarang, int $idMutasi, MutasiUpdateRequest $request): MutasiResource
+    public function update(int $idBarang, int $idMutasi, MutasiUpdateRequest $request): JsonResponse
     {
         $user = Auth::user();
 
@@ -89,7 +93,11 @@ class MutasiController extends Controller
         $mutasi->fill($data);
         $mutasi->save();
 
-        return new MutasiResource($mutasi);
+        $result = Mutasi::with(['users', 'barangs'])->where('barang_id', $barang->id)
+            ->where('id',$mutasi->id)->get();
+        //dd($result);
+
+        return (MutasiResource::collection($result))->response()->setStatusCode(200);
     }
 
     public function delete(int $idBarang, int $idMutasi): JsonResponse

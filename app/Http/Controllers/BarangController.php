@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\BarangCreateRequest;
 use App\Http\Requests\BarangUpdateRequest;
 use App\Http\Resources\BarangResource;
+use App\Http\Resources\MutasiResource;
 use App\Http\Resources\UserResource;
 use App\Models\Barang;
+use App\Models\Mutasi;
+use App\Models\User;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,6 +18,22 @@ use Illuminate\Support\Str;
 
 class BarangController extends Controller
 {
+    private function getBarang(User $user, int $idBarang): Barang
+    {
+        $barang = Barang::where('user_id', $user->id)->where('id', $idBarang)->first();
+        if (!$barang) {
+            throw new HttpResponseException(response()->json([
+                'errors' => [
+                    "message" => [
+                        "not found"
+                    ]
+                ]
+            ])->setStatusCode(404));
+        }
+
+        return $barang;
+    }
+
     public function create(BarangCreateRequest $request): JsonResponse
     {
         $data = $request->validated();
@@ -28,48 +47,37 @@ class BarangController extends Controller
         //dd($barang);
         $barang->save();
 
-        return (new BarangResource($barang))->response()->setStatusCode(201);
+        $result = Barang::with('users')->where('id', $barang->id)->get();
+        //dd($result);
+
+        return (BarangResource::collection($result))->response()->setStatusCode(201);
     }
 
-    public function get(int $id): BarangResource
+    public function get(int $id): JsonResponse
     {
         $user = Auth::user();
 
-        $barang = Barang::where('id', $id)->where('user_id', $user->id)->first();
-        if (!$barang) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    "message" => [
-                        "not found"
-                    ]
-                ]
-            ])->setStatusCode(404));
-        }
-        //dd($barang);
+        $barang = $this->getBarang($user, $id);
+        $result = Barang::with('users')->where('id', $barang->id)->get();
+        //dd($result);
 
-        return new BarangResource($barang);
+        return (BarangResource::collection($result))->response()->setStatusCode(200);
     }
 
-    public function update(int $id, BarangUpdateRequest $request): BarangResource
+    public function update(int $id, BarangUpdateRequest $request): JsonResponse
     {
         $user = Auth::user();
 
-        $barang = Barang::where('id', $id)->where('user_id', $user->id)->first();
-        if (!$barang) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    "message" => [
-                        "not found"
-                    ]
-                ]
-            ])->setStatusCode(404));
-        }
+        $barang = $this->getBarang($user, $id);
 
         $data = $request->validated();
         $barang->fill($data);
         $barang->save();
 
-        return new BarangResource($barang);
+        $result = Barang::with('users')->where('id', $barang->id)->get();
+        //dd($result);
+
+        return (BarangResource::collection($result))->response()->setStatusCode(200);
 
     }
 
@@ -77,16 +85,7 @@ class BarangController extends Controller
     {
         $user = Auth::user();
 
-        $barang = Barang::where('id', $id)->where('user_id', $user->id)->first();
-        if (!$barang) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    "message" => [
-                        "not found"
-                    ]
-                ]
-            ])->setStatusCode(404));
-        }
+        $barang = $this->getBarang($user, $id);
         $barang->delete();
 
         return response()->json([
@@ -94,5 +93,9 @@ class BarangController extends Controller
         ])->setStatusCode(200);
     }
 
-
+    public function all(): JsonResponse
+    {
+        $data = Barang::with('users')->get();
+        return (BarangResource::collection($data))->response()->setStatusCode(200);
+    }
 }

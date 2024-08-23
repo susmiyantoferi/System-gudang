@@ -32,6 +32,7 @@ Route::middleware(\App\Http\Middleware\ApiAuthMiddleware::class)->group(function
     Route::get('/barangs/{id}', [\App\Http\Controllers\BarangController::class, 'get'])->where('id', '[0-9]+');
     Route::put('/barangs/{id}', [\App\Http\Controllers\BarangController::class, 'update'])->where('id', '[0-9]+');
     Route::delete('/barangs/{id}', [\App\Http\Controllers\BarangController::class, 'delete'])->where('id', '[0-9]+');
+    Route::get('/barangs', [\App\Http\Controllers\BarangController::class, 'all']);
 
 
     Route::post('/barangs/{idBarang}/mutasis', [\App\Http\Controllers\MutasiController::class, 'create'])

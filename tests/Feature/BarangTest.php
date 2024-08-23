@@ -27,11 +27,11 @@ class BarangTest extends TestCase
         ])->assertStatus(201)
             ->assertJson([
                 'data' => [
-                    'name' => 'iref',
+                    ['name' => 'iref',
                     'kategori' => 'makanan',
                     'lokasi' => 'rak atas',
                     'harga' => 1000,
-                    'jumlah' => 5
+                    'jumlah' => 5]
                 ]
             ]);
     }
@@ -96,12 +96,12 @@ class BarangTest extends TestCase
         ])->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    'name' => 'testbarang',
+                    ['name' => 'testbarang',
                     'kode' => 'test',
                     'kategori' => 'test',
                     'lokasi' => 'test',
                     'harga' => 1000,
-                    'jumlah' => 7,
+                    'jumlah' => 7,]
                 ]
             ]);
     }
@@ -156,11 +156,11 @@ class BarangTest extends TestCase
         ])->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    'name' => 'update',
+                    ['name' => 'update',
                     'kategori' => 'update',
                     'lokasi' => 'update',
                     'harga' => 10,
-                    'jumlah' => 1,
+                    'jumlah' => 1,]
                 ]
             ]);
     }
@@ -220,5 +220,41 @@ class BarangTest extends TestCase
                 ]
             ]);
     }
+
+    public function testAllSuccess()
+    {
+        $this->seed([UserSeeder::class, BarangSeeder::class]);
+
+        $this->get('/api/barangs', [
+            'Authorization' => 'test'
+        ])->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    ['name' => 'testbarang',
+                        'kode' => 'test',
+                        'kategori' => 'test',
+                        'lokasi' => 'test',
+                        'harga' => 1000,
+                        'jumlah' => 7,]
+                ]
+            ]);
+    }
+
+    public function testAllFailled()
+    {
+        $this->seed([UserSeeder::class, BarangSeeder::class]);
+
+        $this->get('/api/barangs', [
+            'Authorization' => 'salah'
+        ])->assertStatus(401)
+            ->assertJson([
+                'errors' => [
+                    'message'=>[
+                        'unauthorized'
+                    ]
+                ]
+            ]);
+    }
+
 
 }

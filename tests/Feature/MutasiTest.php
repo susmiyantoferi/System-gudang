@@ -30,9 +30,9 @@ class MutasiTest extends TestCase
         )->assertStatus(201)
             ->assertJson([
                 'data' => [
-                    'jenis_mutasi' => 'test',
+                    ['jenis_mutasi' => 'test',
                     'jumlah' => 1,
-                    'tanggal' => '2024-08-22',
+                    'tanggal' => '2024-08-22',]
                 ]
             ]);
     }
@@ -140,9 +140,9 @@ class MutasiTest extends TestCase
             ])->assertStatus(200)
             ->assertJson([
                 'data' => [
-                    'jenis_mutasi' => 'update',
+                    ['jenis_mutasi' => 'update',
                     'jumlah' => 3,
-                    'tanggal' => '2024-09-30',
+                    'tanggal' => '2024-09-30',]
                 ]
             ]);
     }

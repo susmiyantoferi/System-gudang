@@ -23,6 +23,7 @@ class BarangResource extends JsonResource
             'harga' => $this->harga,
             'jumlah' => $this->jumlah,
             'user_id' => $this->user_id,
+            'user' => new UserResource($this->whenLoaded('users')),
         ];
     }
 }
